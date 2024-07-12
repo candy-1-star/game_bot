@@ -4,7 +4,12 @@ import sqlite3
 from aiogram import Bot, Dispatcher, F
 from aiogram.client.default import DefaultBotProperties
 from aiogram.filters import Command
-from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import Message
+from aiogram.utils.deep_linking import create_start_link
+from aiogram.utils.payload import decode_payload
+
+from keybords.keyboard1 import kb1
+from keybords.keyboard2 import kb2
 
 bot = Bot(token='7343617128:AAHyW2P6KApMkQlBGf2vIGlNPl7CrYYmcwA', default=DefaultBotProperties(parse_mode='HTML'))
 dp = Dispatcher()
@@ -30,24 +35,21 @@ con.commit()
 
 
 @dp.message(Command('start'))
-async def start_command(message: Message):
+async def start_command(message: Message, command: Command = None):
     cur.execute('INSERT INTO Users (ids, many, common, rare, epic) VALUES (?, ?, ?, ?, ?)',
-                (message.from_user.id, 0, 0, 0, 0))
+                    (message.from_user.id, 0, 0, 0, 0))
     con.commit()
     cur.execute('INSERT INTO Promo (id_us, promo1, promo2, promo3) VALUES (?, ?, ?, ?)',
-                (message.from_user.id, 0, 0, 0))
+                    (message.from_user.id, 0, 0, 0))
     con.commit()
-    buttons = [
-        [KeyboardButton(text='📈 -> Cтатистика')],
-        [KeyboardButton(text='🔖 -> Задания')],
-        [KeyboardButton(text='💎 -> Капсулы')]
-    ]
-    kb = ReplyKeyboardMarkup(
-        keyboard=buttons,
-        resize_keyboard=True,
-        input_field_placeholder='📌 -> Введите промокод'
-    )
-    await message.reply(f'Привет, <u>@{message.from_user.username}</u>!', reply_markup=kb)
+    await message.reply(f'Привет, <u>@{message.from_user.username}</u>!', reply_markup=kb1)
+
+    if command:
+        args = command.args
+        reference = decode_payload(args)
+        await message.reply(f'Теперь вы и ваш реферал получат по 1000 many')
+        cur.execute('UPDATE Users SET many = many + 1000 WHERE ids = ?', (reference, ))
+        cur.execute('UPDATE Users SET many = many + 1000 WHERE ids = ?', (message.from_user.id,))
 
 
 @dp.message(F.text == '📈 -> Cтатистика')
@@ -77,7 +79,16 @@ Epic - <em>{epic}</em>
 
 @dp.message(F.text == '🔖 -> Задания')
 async def mession_msg(message: Message):
-    await message.reply('Ладно...')
+    await message.reply(f'''
+<u>@{message.from_user.username}</u>, ты должен навербовать как можно больше людей, чтобы стать богаче!
+За каждого нового приглашенного пользователя ты получишь <em>1000 many</em>
+''', reply_markup=kb2)
+
+
+@dp.message(F.text == '🎫 -> Ваша реферальная ссылка')
+async def mession_msg_1(message: Message):
+    link = await create_start_link(bot, str(message.from_user.id), encode=True)
+    await message.reply(f'Вот ваша реферальная ссылка -> {link}', reply_markup=kb1)
 
 
 @dp.message()
