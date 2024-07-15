@@ -3,8 +3,9 @@ from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardMar
 buttons1 = [
     [KeyboardButton(text='📈 -> Статистика')],
     [KeyboardButton(text='❤️ -> Мои карточки')],
-    [KeyboardButton(text='🔖 -> Задания')],
     [KeyboardButton(text='💎 -> Капсулы')],
+    [KeyboardButton(text='🤝 -> Обмен')],
+    [KeyboardButton(text='🔖 -> Задания')],
     [KeyboardButton(text='🎫 -> Ваша реферальная ссылка')],
     [KeyboardButton(text='🔥 -> Промокоды')]
 ]
@@ -60,6 +61,42 @@ kb5 = InlineKeyboardMarkup(
             callback_data="epic_cart"
         )]
     ]
+)
+
+kb8 = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(
+            text="✅",
+            callback_data="yes1"
+        )],
+        [InlineKeyboardButton(
+            text="❌",
+            callback_data="no1"
+        )]
+    ]
+)
+
+kb9 = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(
+            text="✅",
+            callback_data="yes2"
+        )],
+        [InlineKeyboardButton(
+            text="❌",
+            callback_data="no2"
+        )]
+    ]
+)
+
+buttons_tr = [
+    [KeyboardButton(text='✅ -> Да')],
+    [KeyboardButton(text='❌ -> Нет')]
+]
+
+kb_tr = ReplyKeyboardMarkup(
+    keyboard=buttons_tr,
+    resize_keyboard=True
 )
 
 buttons_ex = [
