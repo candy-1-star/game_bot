@@ -24,10 +24,8 @@ kb2 = ReplyKeyboardMarkup(
 )
 
 buttons3 = [
-    [KeyboardButton(text='🔮 -> Капсула 1')],
-    [KeyboardButton(text='🔮 -> Капсула 2')],
-    [KeyboardButton(text='🔮 -> Капсула 3')]
-]
+    [KeyboardButton(text='🔮 -> Капсула 1')]
+    ]
 kb3 = ReplyKeyboardMarkup(
     keyboard=buttons3,
     resize_keyboard=True,
@@ -106,12 +104,3 @@ kb_ex = ReplyKeyboardMarkup(
     keyboard=buttons_ex,
     resize_keyboard=True
 )
-
-# [InlineKeyboardButton(
-#     text="<<",
-#     callback_data="<<"
-# )],
-# [InlineKeyboardButton(
-#     text="<<<",
-#     callback_data="<<<"
-# )],
